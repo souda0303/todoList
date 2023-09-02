@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: rgb(2,0,36);
+        background: linear-gradient(90deg, rgba(24, 36, 0, 0.402) 0%, rgba(121, 63, 9, 0.735) 35%, rgba(179, 0, 255, 0.425) 100%);
+      }
+      
+      h1 {
+        font-family: "Work Sans", sans-serif;
+        font-weight: 700;
+        font-size: 200px;
+        width: 5em;
+        line-height: 0.9em;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 1.5em;
+        margin-top: calc(50vh - 1em);
+      }
+
+
+      /* Style the rainbow text element. */
+      .rainbow-text {
+        /* Create a conic gradient. */
+        /* Double percentages to avoid blur (#000 10%, #fff 10%, #fff 20%, ...). */
+        background: #CA4246;
+        background-color: #CA4246;
+        background: conic-gradient(
+          #CA4246 16.666%, 
+          #E16541 16.666%, 
+          #E16541 33.333%, 
+          #F18F43 33.333%, 
+          #F18F43 50%, 
+          #8B9862 50%, 
+          #8B9862 66.666%, 
+          #476098 66.666%, 
+          #476098 83.333%, 
+          #A7489B 83.333%);
+        
+        /* Set thee background size and repeat properties. */
+        background-size: 57%;
+        background-repeat: repeat;
+        
+        /* Use the text as a mask for the background. */
+        /* This will show the gradient as a text color rather than element bg. */
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent; 
+        
+        /* Animate the text when loading the element. */
+        /* This animates it on page load and when hovering out. */
+        animation: rainbow-text-animation-rev 0.5s ease forwards;
+
+        cursor: pointer;
+      }
+
+      /* Add animation on hover. */
+      .rainbow-text:hover {
+        animation: rainbow-text-animation 0.5s ease forwards;
+      }
+
+      /* Move the background and make it larger. */
+      /* Animation shown when hovering over the text. */
+      @keyframes rainbow-text-animation {
+        0% {
+          background-size: 57%;
+          background-position: 0 0;
+        }
+        20% {
+          background-size: 57%;
+          background-position: 0 1em;
+        }
+        100% {
+          background-size: 300%;
+          background-position: -9em 1em;
+        }
+      }
+
+      /* Move the background and make it smaller. */
+      /* Animation shown when entering the page and after the hover animation. */
+      @keyframes rainbow-text-animation-rev {
+        0% {
+          background-size: 300%;
+          background-position: -9em 1em;
+        }
+        20% {
+          background-size: 57%;
+          background-position: 0 1em;
+        }
+        100% {
+          background-size: 57%;
+          background-position: 0 0;
+        }
+      }
+      
+      #todoContainer {
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 30px;
+        background: radial-gradient(788px at 0.7% 3.4%, rgb(164, 231, 192) 0%, rgb(255, 255, 255) 90%);        border-radius: 20px;
+      }
+      
+      #todoInput {
+        width: 96%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        font-size: 50px;
+      }
+      
+      #addBtn {
+        width: 100%;
+        padding: 10px;
+        background: linear-gradient(to right, rgb(182, 244, 146), rgb(51, 139, 147));
+        color: #fff;
+        border: none;
+        border-radius: 40px;
+        font-size: 50px;
+        cursor: pointer;
+      }
+      
+      #addBtn:hover {
+        background-color: #45a049;
+      }
+      
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      
+      li {
+        font-size: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        margin-bottom: 5px;
+        background: rgb(2,0,36);
+        background: linear-gradient(90deg, rgba(137, 176, 171, 0.756) 0%, rgba(55, 118, 123, 0.322) 35%, rgba(0, 145, 255, 0.432) 100%);
+        border-radius: 25px;
+      }
+      
+      li span {
+        margin-right: 10px;
+      }
+      
+      li button {
+        background-color: transparent;
+        border: none;
+        font-size: 100px;
+        cursor: pointer;
+      }
+      
+    </style>
+  </head>
+
+  <body>
+    <h1 class="rainbow-text">
+      To-Do List
+    </h1>
+    <div id="todoContainer">
+      <input class = "rainbow-text" type="text" id="todoInput" placeholder="Enter a to-do item">
+      <button id="addBtn">Add</button>
+      <ul id="todoList" class="rainbow-text"></ul>
+    </div>
+
+    <script>
+      // Get necessary elements
+      const todoInput = document.getElementById("todoInput");
+      const addBtn = document.getElementById("addBtn");
+      const todoList = document.getElementById("todoList");
+
+      // Function to create a new to-do item
+      function createTodoItem(itemText) {
+        const li = document.createElement("li");
+        const span = document.createElement("span");
+        const deleteBtn = document.createElement("button");
+
+        span.textContent = itemText;
+        deleteBtn.innerHTML = "&times;";
+
+        // Event listener for deleting an item
+        deleteBtn.addEventListener("click", function () {
+          li.remove();
+        });
+
+        li.appendChild(span);
+        li.appendChild(deleteBtn);
+        todoList.appendChild(li);
+      }
+
+      // Event listener for adding a new item
+      addBtn.addEventListener("click", function () {
+        const newItemText = todoInput.value.trim();
+        if (newItemText !== "") {
+          createTodoItem(newItemText);
+          todoInput.value = "";
+        }
+      });
+
+      // Event listener for pressing Enter key
+      todoInput.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+          const newItemText = todoInput.value.trim();
+          if (newItemText !== "") {
+            createTodoItem(newItemText);
+            todoInput.value = "";
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
